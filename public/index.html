@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+	<title>Web MIDI monosynth using Web Audio</title>
+
+	<!-- Set up Web MIDI polyfill -->
+    <script src='//cwilso.github.com/WebMIDIAPIShim/lib/WebMIDIAPI.js'></script>
+    <script type="text/javascript" src="glMatrix-0.9.5.min.js"></script>
+    <script type="text/javascript" src="webgl-utils.js"></script>
+    <script src='UI.js'></script>
+    <script src='WS.js'></script>
+		<script src="MIDI.js"></script>
+</head>
+<body>
+	This example uses Web MIDI input (from all available ports and channels) to drive a Web Audio monophonic synthesizer.  There is no UI.  <a href="http://github.com/cwilso/monosynth">Source available on github.</a>
+
+	<h2 id="badtime" style="visibility:hidden">No MIDI input devices present.  You're gonna have a bad time.</h2>
+
+  <canvas id="glcanvas" width="640" height="480">
+    Your browser doesn't appear to support the
+    <code>&lt;canvas&gt;</code> element.
+  </canvas>
+
+</body>
+
+
+	<script id="shader-fs" type="x-shader/x-fragment">
+		precision mediump float;
+
+		varying vec4 vColor;
+
+		void main(void) {
+				gl_FragColor = vColor;
+		}
+	</script>
+
+	<script id="shader-vs" type="x-shader/x-vertex">
+		attribute vec3 aVertexPosition;
+		attribute vec4 aVertexColor;
+
+		uniform mat4 uMVMatrix;
+		uniform mat4 uPMatrix;
+
+		varying vec4 vColor;
+
+		void main(void) {
+				gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+				vColor = aVertexColor;
+		}
+	</script>
+
+
+</html>
